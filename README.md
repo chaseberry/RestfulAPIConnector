@@ -10,6 +10,7 @@ To-do
 - [ ] Change how errors work 
 - [ ] Add customization for defining success and failure
 - [ ] Improve regex on executeWithEndpoint functions
+- [ ] Optimize the nested keys functions
 
 
 Usage
@@ -104,3 +105,22 @@ RestAPIListener loginListener = new RestAPIListener(){
 };
 
 ```
+
+The JSONWrapper also supports nested keys/arrays.
+
+```JSON
+{
+    key1:"some string",
+    key2:{
+        key3:"some data"
+    }
+    
+}
+```
+
+The following data stored in key3 can be accessed by
+```Java
+    json.checkAndGetString("failed", "key2:key3");
+```
+The ':' syntax in a key denotes nested. This can be used to look inside arrays with "messages:0:sender"
+The wrapper will look in the messages key, at the 0 index of that array, for the sender key.
