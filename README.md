@@ -13,20 +13,38 @@ To-do
 
 Usage
 =====
-There are four main classes needed to use the library: APIConnectionManager, Parameter, RestfulAPIListener, and JSONWrapper
+There are four main classes needed to use the library: APIConnectionManager, Parameter, RestAPIListener, and JSONWrapper
 
 
 
 ```Java
 APIConnectionManager apiConnection = new APIConnectionManager(someContext);
 Parameter email, password;
+
 try{
     email = new Parameter("email", userEmail, Parameter.FORMDATA);
     password = new Parameter("password", userPassword, Parameter.FORMDATA);
 }catch(RestAPIParemeterException e){
     //some catch code
 }
-apiConnection.execute(new RestfulAPIListener(), "http://someurl.com/users" APIConnectionManager.POST, email, password);
 
+try{
+    apiConnection.execute(new RestAPIListener(), "http://someurl.com/users" APIConnectionManager.POST, email, password);
+}catch(InvalidMethodTypeException e){
+    //Don't use invalid method types
+}
+
+```
+
+But it also uses endpoints!
+
+```Java
+APIConnectionManager apiConnection = new APIConnectionManager("http://someurl.com/some/base/api");
+
+try{
+    apiConnection.executeWithEndpoint(new RestAPIListener(), "/messages", APIConnectionManager.GET);
+}catch(InvalidMethodTypeException e){
+    //Don't use invalid method types
+}
 
 ```
