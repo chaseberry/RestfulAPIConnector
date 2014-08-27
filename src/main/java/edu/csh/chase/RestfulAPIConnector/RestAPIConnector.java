@@ -45,12 +45,21 @@ public class RestAPIConnector extends AsyncTask<String, Void, JSONWrapper> {
     private RestAPIListener runner;
     private HttpRequestBase httpRequest;
 
-    public RestAPIConnector(RestAPIListener r, String url, int method, Parameter... params) throws InvalidMethodTypeException {
+    /**
+     * Creates a RestAPIConnector to make the connection to the server aysnc.
+     *
+     * @param runner The RestAPIListener to run once the request has been fulfilled
+     * @param url The URL to make the request
+     * @param method The method type
+     * @param params Vararg of parameters
+     * @throws InvalidMethodTypeException if the method type is invalid
+     */
+    public RestAPIConnector(RestAPIListener runner, String url, int method, Parameter... params) throws InvalidMethodTypeException {
         if (method < 0 || method > 5) {
             throw new InvalidMethodTypeException(method + " is not a valid method. Use RestAPIConnector to get " +
                     "valid methods");
         }
-        runner = r;
+        runner = runner;
         HashMap<String, Object> paramMap = parseParameters(url, params);
         switch (method) {
             case GET:
