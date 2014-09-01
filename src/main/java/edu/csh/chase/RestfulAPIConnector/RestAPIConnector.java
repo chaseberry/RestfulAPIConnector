@@ -59,7 +59,7 @@ public class RestAPIConnector extends AsyncTask<String, Void, JSONWrapper> {
             throw new InvalidMethodTypeException(method + " is not a valid method. Use RestAPIConnector to get " +
                     "valid methods");
         }
-        runner = runner;
+        this.runner = runner;
         HashMap<String, Object> paramMap = parseParameters(url, params);
         switch (method) {
             case GET:
