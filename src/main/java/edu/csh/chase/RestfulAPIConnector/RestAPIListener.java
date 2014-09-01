@@ -31,7 +31,7 @@ public abstract class RestAPIListener {
 
     
     public void start() {
-        if(statusCode >= 200 || statusCode <= 299){
+        if(statusCode >= 200 && statusCode <= 299){
             success(data, statusCode);
         }else{
             failure(statusCode);
