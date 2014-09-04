@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.ClassCastException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,8 +101,23 @@ public class RestAPIConnector extends AsyncTask<String, Void, JSONWrapper> {
                     headers.add(new BasicHeader(param.getKey(), param.getValue()));
                     break;
                 case Parameter.JSONBODY:
+                    Object value = param.getValue();
                     try {
-                        rawJson.put(param.getKey(), param.getValue());
+                       JSONParamter jsonParameter = (JSONParameter) param;
+                        switch(jsonParameter.getJsonParameterType){
+                            case JSONParameter.JSONOBJECTPARAMETER:
+                                value = jsonParameter.getJsonObjectValue;
+                                break;
+                            case JSONParameter.JSONARRAYPARAMETER:
+                                value = jsonParameter.getJsonArrayValue;
+                                break;
+                        }
+                    }
+                    catch(ClassCastException e){
+
+                    }
+                    try {
+                        rawJson.put(param.getKey(), value);
                     } catch (JSONException e) {
 
                     }
