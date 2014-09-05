@@ -53,7 +53,8 @@ public class RestAPIConnector extends AsyncTask<String, Void, JSONWrapper> {
      * @param url The URL to make the request
      * @param method The method type
      * @param params Vararg of parameters
-     * @throws InvalidMethodTypeException if the method type is invalid
+     *
+     * @throws edu.csh.chase.RestfulAPIConnector.InvalidMethodTypeException if the method type is invalid
      */
     public RestAPIConnector(RestAPIListener runner, String url, int method, Parameter... params) throws InvalidMethodTypeException {
         if (method < 0 || method > 5) {
@@ -103,13 +104,13 @@ public class RestAPIConnector extends AsyncTask<String, Void, JSONWrapper> {
                 case Parameter.JSONBODY:
                     Object value = param.getValue();
                     try {
-                       JSONParamter jsonParameter = (JSONParameter) param;
-                        switch(jsonParameter.getJsonParameterType){
+                       JSONParameter jsonParameter = (JSONParameter) param;
+                        switch(jsonParameter.getJsonParameterType()){
                             case JSONParameter.JSONOBJECTPARAMETER:
-                                value = jsonParameter.getJsonObjectValue;
+                                value = jsonParameter.getJsonObjectValue();
                                 break;
                             case JSONParameter.JSONARRAYPARAMETER:
-                                value = jsonParameter.getJsonArrayValue;
+                                value = jsonParameter.getJsonArrayValue();
                                 break;
                         }
                     }
@@ -266,7 +267,7 @@ public class RestAPIConnector extends AsyncTask<String, Void, JSONWrapper> {
 
     @Override
     protected void onPostExecute(JSONWrapper jsonObject) {
-        if (runner != null) {//We should NEVER get a code > 300 except for permissions errors
+        if (runner != null) {
             runner.setData(jsonObject);
             runner.start();
         }

@@ -5,26 +5,26 @@ import org.json.JSONObject;
 
 public class JSONParameter extends Parameter{
 
-    public final int JSONBODY = 0;
-    public final int JSONOBJECTPARAMETER = 1;
-    public final int JSONARRAYPARAMETER = 2;
+    public static final int JSONSTRINGBODY = 0;
+    public static final int JSONOBJECTPARAMETER = 1;
+    public static final int JSONARRAYPARAMETER = 2;
     Object value;//either JSONObject or JSONArray;
     private int jsonParameterType = 0;
 
-    public JSONParameter(final String key, String value){
-        super(key, value, Parameter.JSONBODY)
+    public JSONParameter(final String key, String value) throws RestAPIParemeterException{
+        super(key, value, Parameter.JSONBODY);
     }
 
-    public JSONParameter(final String key, JSONObject value){
+    public JSONParameter(final String key, JSONObject value) throws RestAPIParemeterException{
+        super(key, "", Parameter.JSONBODY);
         jsonParameterType = JSONOBJECTPARAMETER;
-        super(key, "", Parameter.JSONBODY);
-        value = this.value;
+        this.value = value;
     }
 
-    public JSONParameter(final String key, JSONArray value){
-        jsonParameterType = JSONARRAYPARAMETER;
+    public JSONParameter(final String key, JSONArray value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
-        value = this.value;
+        jsonParameterType = JSONARRAYPARAMETER;
+        this.value = value;
     }
 
     public int getJsonParameterType(){

@@ -58,7 +58,8 @@ public class APIConnectionManager {
      * @param method The request method to make the request
      * @param extra A string extra that can be accessed from the RestAPIListener when the request is finished
      * @param parameters A vararg of Parameters to send with the request
-     * @throws InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
+     * @throws edu.csh.chase.RestfulAPIConnector.InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
+
      */
     public void execute(RestAPIListener runner, String url, int method, String extra, Parameter... parameters)
         throws InvalidMethodTypeException {
@@ -85,7 +86,7 @@ public class APIConnectionManager {
      * @param runner A RestAPIListener to process the returned data when the request finishes
      * @param method The request method to make the request
      * @param parameters A vararg of Parameters to send with the request
-     * @throws InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
+     * @throws edu.csh.chase.RestfulAPIConnector.InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
      */
     public void execute(RestAPIListener runner, int method, Parameter... parameters)
         throws InvalidMethodTypeException {
@@ -103,7 +104,8 @@ public class APIConnectionManager {
      * @param url The url for the request
      * @param method The request method to make the request
      * @param parameters A vararg of Parameters to send with the request
-     * @throws InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
+     * @throws edu.csh.chase.RestfulAPIConnector.InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
+
      */
     public void execute(RestAPIListener runner, String url, int method, Parameter... parameters)
         throws InvalidMethodTypeException {
@@ -121,7 +123,8 @@ public class APIConnectionManager {
      *                 will become "http://example.com/api/messages/15"
      * @param method The request method to make the request
      * @param parameters A vararg of Parameters to send with the request
-     * @throws InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
+     * @throws edu.csh.chase.RestfulAPIConnector.InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
+
      */
     public void executeWithEndpoint(RestAPIListener runner, String endPoint, int method, Parameter... parameters)
         throws InvalidMethodTypeException {
@@ -140,7 +143,8 @@ public class APIConnectionManager {
      * @param method The request method to make the request
      * @param extra A string extra that can be accessed from the RestAPIListener when the request is finished
      * @param parameters A vararg of Parameters to send with the request
-     * @throws InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
+     * @throws edu.csh.chase.RestfulAPIConnector.InvalidMethodTypeException if the method is not a valid method type defined in RestAPIConnector
+
      */
     public void executeWithEndpoint(RestAPIListener runner, String endPoint, int method, String extra, Parameter... parameters)
         throws InvalidMethodTypeException{
