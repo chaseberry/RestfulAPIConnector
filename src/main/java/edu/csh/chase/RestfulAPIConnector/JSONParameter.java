@@ -35,25 +35,25 @@ public class JSONParameter extends Parameter{
         this.value = value;
     }
 
-    public JSONParameter(final String key, boolean value){
+    public JSONParameter(final String key, boolean value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
         this.value = new Boolean(value);
         jsonParameterType = JSONBOOLEANPARAMETER;
     }
 
-    public JSONParameter(final String key, int value){
+    public JSONParameter(final String key, int value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
         this.value = new Integer(value);
         jsonParameterType = JSONINTPARAMETER;
     }
 
-    public JSONParameter(final String key, double value){
+    public JSONParameter(final String key, double value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
         this.value = new Double(value);
         jsonParameterType = JSONDOUBLEPARAMETER;
     }
 
-    public JSONParameter(final String key, long value){
+    public JSONParameter(final String key, long value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
         this.value = new Long(value);
         jsonParameterType = JSONLONGPARAMETER;
