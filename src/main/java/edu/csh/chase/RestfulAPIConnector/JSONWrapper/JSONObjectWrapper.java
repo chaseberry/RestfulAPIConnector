@@ -95,13 +95,13 @@ public class JSONObjectWrapper {
                         tempArray = tempArray.getJSONArray(Integer.parseInt(keyset[z]));
                     }
                 } else {
-                    if (!temp.has(keyset[z])) {
-                        return null;
-                    }
                     if (tempArray != null) {
                         temp = tempArray.getJSONObject(Integer.parseInt(keyset[z]));
                         tempArray = null;
                     } else {
+                        if (!temp.has(keyset[z])) {
+                            return null;
+                        }
                         temp = temp.getJSONObject(keyset[z]);
                     }
                 }
