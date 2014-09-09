@@ -103,18 +103,10 @@ public class RestAPIConnector extends AsyncTask<String, Void, JSONWrapper> {
                     break;
                 case Parameter.JSONBODY:
                     Object value = param.getValue();
-                    try {
-                       JSONParameter jsonParameter = (JSONParameter) param;
-                        switch(jsonParameter.getJsonParameterType()){
-                            case JSONParameter.JSONOBJECTPARAMETER:
-                                value = jsonParameter.getJsonObjectValue();
-                                break;
-                            case JSONParameter.JSONARRAYPARAMETER:
-                                value = jsonParameter.getJsonArrayValue();
-                                break;
-                        }
-                    }
-                    catch(ClassCastException e){
+                    try{
+                        JSONParameter parameter = (JSONParameter)param;
+                        value = parameter.getObjectValue();
+                    }catch(ClassCastException e){
 
                     }
                     try {
