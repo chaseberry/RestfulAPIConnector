@@ -1,5 +1,7 @@
 package edu.csh.chase.RestfulAPIConnector;
 
+import org.json.JSONObject;
+
 /**
  * Created by chase on 7/15/14.
  */
@@ -24,17 +26,13 @@ public class Parameter {
      *                   Parameter.FORMDATA - A paramter in a POST form. Only works for POST requests
      *                   Parameter.HEADER - A URL Encoded header
      *                   Parameter.JSONBODY - Raw body in JSON Format
-     * @throws RestAPIParemeterException If you pass an invalid Parameter type
+     * @throws edu.csh.chase.RestfulAPIConnector.RestAPIParemeterException If you pass an invalid Parameter type
      */
     public Parameter(final String key, String value, int methodType) throws RestAPIParemeterException{
-        if(methodType < 0 || methodType > 3){
-            throw new RestAPIParemeterException(methodType + " is not a valid parameter type.");
-        }
         this.key = key;
         this.value = value;
         this.methodType = methodType;
     }
-
 
     /**
      *
