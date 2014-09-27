@@ -9,40 +9,55 @@ import java.lang.String;
 
 public class JSONParameter extends Parameter{
 
-    Object value;//either JSONObject or JSONArray;
+    public static final int JSONSTRINGBODY = 0;
+    public static final int JSONOBJECTPARAMETER = 1;
+    public static final int JSONARRAYPARAMETER = 2;
+    public static final int JSONINTPARAMETER = 3;
+    public static final int JSONBOOLEANPARAMETER = 4;
+    public static final int JSONDOUBLEPARAMETER = 5;
+    public static final int JSONLONGPARAMETER = 6;
+    Object objectValue;//either JSONObject or JSONArray;
+    private int jsonParameterType = 0;
 
     public JSONParameter(final String key, String value) throws RestAPIParemeterException{
         super(key, value, Parameter.JSONBODY);
+        objectValue = value;
     }
 
     public JSONParameter(final String key, JSONObject value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
-        this.value = value;
+        jsonParameterType = JSONOBJECTPARAMETER;
+        objectValue = value;
     }
 
     public JSONParameter(final String key, JSONArray value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
-        this.value = value;
+        jsonParameterType = JSONARRAYPARAMETER;
+        objectValue = value;
     }
 
     public JSONParameter(final String key, boolean value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
-        this.value = new Boolean(value);
+        objectValue = new Boolean(value);
+        jsonParameterType = JSONBOOLEANPARAMETER;
     }
 
     public JSONParameter(final String key, int value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
-        this.value = new Integer(value);
+        objectValue = new Integer(value);
+        jsonParameterType = JSONINTPARAMETER;
     }
 
     public JSONParameter(final String key, double value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
-        this.value = new Double(value);
+        objectValue = new Double(value);
+        jsonParameterType = JSONDOUBLEPARAMETER;
     }
 
     public JSONParameter(final String key, long value) throws RestAPIParemeterException{
         super(key, "", Parameter.JSONBODY);
-        this.value = new Long(value);
+        objectValue = new Long(value);
+        jsonParameterType = JSONLONGPARAMETER;
     }
 
     public int getJsonParameterType(){
@@ -50,7 +65,7 @@ public class JSONParameter extends Parameter{
     }
 
     public Object getObjectValue(){
-        return value;
+        return objectValue;
     }
 
 }

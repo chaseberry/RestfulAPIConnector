@@ -5,21 +5,16 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.client.methods.HttpRequestBase;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import edu.csh.chase.RestfulAPIConnector.JSONWrapper.JSONWrapper;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class APIConnectionManager {
 
     private Context parent;
     private String url;
+    private static ExecutorService apiExecutorService;
 
     /**
      * Creates an APIConnectionManager to interface with the RestAPIConnector
@@ -30,6 +25,9 @@ public class APIConnectionManager {
     public APIConnectionManager(Context context, String url) {
         parent = context;
         this.url = url;
+        if(apiExecutorService == null){
+            apiExecutorService = Executors.newCachedThreadPool();
+        }
     }
 
     /**
@@ -71,12 +69,16 @@ public class APIConnectionManager {
             throw new InvalidMethodTypeException(method + " is not a valid method. Use RestAPIConnector to get " +
                     "valid methods");
         }
-
-        RestAPIConnector connector = new RestAPIConnector(runner, url, method, parameters);
         if (extra != null) {
             runner.setExtra(extra);
         }
-        connector.execute();
+
+        HttpRequestBase request = APIRequestGenerator.generateRequest(method, url, parameters);
+        if(request == null){
+            return;
+        }
+        apiExecutorService.execute(new RestAPIRunnable(runner, request));
+
     }
 
     /**
