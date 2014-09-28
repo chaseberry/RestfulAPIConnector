@@ -43,7 +43,7 @@ try{
                 public void failure(int statusCode) {
                     //do something on failure
                 }
-            }, "http://someurl.com/users" APIConnectionManager.POST, email, password);
+            }, "http://someurl.com/users" RestAPIRunnable.POST, email, password);
 }catch(InvalidMethodTypeException e){
     //Don't use invalid method types
 }
@@ -66,7 +66,7 @@ try{
                 public void failure(int statusCode) {
                     //something on failure
                 }
-            }, "/messages", APIConnectionManager.GET);
+            }, "/messages", RestAPIRunnable.GET);
 }catch(InvalidMethodTypeException e){
     //Don't use invalid method types
 }
