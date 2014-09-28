@@ -48,7 +48,7 @@ public class RestAPIRunnable implements Runnable{
             }
             String res = EntityUtils.toString(response.getEntity());
             try {
-                postExecute(new JSONWrapper(res));
+                postExecute(JSONWrapper.parseJSON(res));
             } catch (JSONException ex) {
                 postExecute(null);
             }
