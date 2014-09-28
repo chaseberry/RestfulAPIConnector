@@ -26,8 +26,8 @@ APIConnectionManager apiConnection = new APIConnectionManager(someContext);
 Parameter email, password;
 
 try{
-    email = new Parameter("email", userEmail, Parameter.FORMDATA);
-    password = new Parameter("password", userPassword, Parameter.FORMDATA);
+    email = new FormParameter("email", userEmail);
+    password = new FormParameter("password", userPassword);
 }catch(RestAPIParemeterException e){
     //some catch code
 }
@@ -43,7 +43,7 @@ try{
                 public void failure(int statusCode) {
                     //do something on failure
                 }
-            }, "http://someurl.com/users" APIConnectionManager.POST, email, password);
+            }, "http://someurl.com/users" RestAPIRunnable.POST, email, password);
 }catch(InvalidMethodTypeException e){
     //Don't use invalid method types
 }
@@ -66,11 +66,25 @@ try{
                 public void failure(int statusCode) {
                     //something on failure
                 }
-            }, "/messages", APIConnectionManager.GET);
+            }, "/messages", RestAPIRunnable.GET);
 }catch(InvalidMethodTypeException e){
     //Don't use invalid method types
 }
 ```
+
+Form Data, URL Parameters, and Headers all have new creation in the form of URLParameter, HeaderParameter, and FormParameter. These work in the exact same was as delcaring a parameter but it takes care of type handling.
+```Java
+FormParameter formParam = new FormParameter("key", "value");
+URLParameter urlParam = new URLParameter("key", "value");
+HeaderParameter header = new HeaderParameter("key", value);
+```
+
+JSON parameters also got this update, but with a nice twist. JSONParameters now support their value with JSONObjects, JSONArrays, ints, longs, doubles, and booleans.
+```Java
+JSONParameter jsonParam = new JSONParameter("key", "value");
+JSONParameter jsonParam2 = new JSONParameter("key", 1.52);
+```
+
 
 Data returned from the server is bundled into a JSONWrapper which can contain either a JSONObject or JSONArray with jsons default accessors.
 

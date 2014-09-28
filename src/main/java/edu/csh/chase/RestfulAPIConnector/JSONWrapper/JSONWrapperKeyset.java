@@ -4,12 +4,19 @@ import android.util.Log;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+<<<<<<< HEAD
 import java.util.Iterator;
+=======
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
 
 /**
  * Created by chase on 9/27/14.
  */
+<<<<<<< HEAD
 public class JSONWrapperKeyset implements Iterator<String> {
+=======
+public class JSONWrapperKeyset {
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
 
     private String[] keyset;
     private int currentIndex = 0;
@@ -36,6 +43,21 @@ public class JSONWrapperKeyset implements Iterator<String> {
         return key.split(KEYSPLIT);
     }
 
+<<<<<<< HEAD
+=======
+    public String getCurrentKey(){
+        if(currentIndex >= keyset.length){
+            return null;
+        }
+        currentIndex++;
+        return keyset[currentIndex-1];
+    }
+
+    public boolean hasNextKey(){
+        return currentIndex + 1 < keyset.length;
+    }
+
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
     public String getKeySet(){
         String key = "";
         for(String s:keyset){
@@ -47,6 +69,7 @@ public class JSONWrapperKeyset implements Iterator<String> {
     public String toString(){
         return getKeySet();
     }
+<<<<<<< HEAD
 
     @Override
     public boolean hasNext() {
@@ -65,4 +88,6 @@ public class JSONWrapperKeyset implements Iterator<String> {
     @Override
     public void remove() {
     }
+=======
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
 }

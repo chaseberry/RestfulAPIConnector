@@ -38,7 +38,11 @@ public abstract class JSONWrapper {
     //***************************Debug functions****************************************************
 
     public void setDebugMode(boolean debug) {
+<<<<<<< HEAD
         this.debugMode = debug;
+=======
+        debugMode = debug;
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
     }
 
     protected void debug(String message) {
@@ -58,8 +62,13 @@ public abstract class JSONWrapper {
     //****************************PARSERS***********************************************************
 
     protected Object parseKey(JSONWrapperKeyset keySet, JSONArray array) throws JSONException {
+<<<<<<< HEAD
         boolean hasNext = keySet.hasNext();
         String key = keySet.next();
+=======
+        boolean hasNext = keySet.hasNextKey();
+        String key = keySet.getCurrentKey();
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
         int arrayKey = -1;
         debug("Trying key: " + key + " : With JSONArray");
         try {
@@ -68,6 +77,13 @@ public abstract class JSONWrapper {
             debug(key + " is not a valid array key");
             throw new JSONException(key + " is not a valid key for array");
         }
+<<<<<<< HEAD
+=======
+        if (arrayKey < 0 || arrayKey >= array.length()) {
+            debug(key + " is an invalid index for JSONArray");
+            throw new JSONException(key + " is not a valid key for array");
+        }
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
         if (hasNext) {
             if (isObjectJSONObject(array.get(arrayKey))) {
                 return parseKey(keySet, array.getJSONObject(arrayKey));
@@ -80,9 +96,19 @@ public abstract class JSONWrapper {
     }
 
     protected Object parseKey(JSONWrapperKeyset keySet, JSONObject object) throws JSONException {
+<<<<<<< HEAD
         boolean hasNext = keySet.hasNext();
         String key = keySet.next();
         debug("Trying key: " + key + " : On JSONObject");
+=======
+        boolean hasNext = keySet.hasNextKey();
+        String key = keySet.getCurrentKey();
+        debug("Trying key: " + key + " :On JSONObject");
+        if (!object.has(key)) {
+            debug(key + " is not a valid key for object");
+            throw new JSONException(key + " is not a valid key for object");
+        }
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
         if (hasNext) {
             if (isObjectJSONObject(object.get(key))) {
                 return parseKey(keySet, object.getJSONObject(key));

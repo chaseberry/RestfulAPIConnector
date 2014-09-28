@@ -18,6 +18,7 @@ public class JSONObjectWrapper extends JSONWrapper {
         this.object = new JSONObject(s);
     }
 
+<<<<<<< HEAD
     public String getValidKey(String... keys) {
         if(object == null){
             return null;
@@ -31,6 +32,18 @@ public class JSONObjectWrapper extends JSONWrapper {
                 }
             } catch (JSONException e) {
                 debug(e.getMessage());
+=======
+    public String getValidKey(String... keys){
+        for(String key : keys){
+            debug("Trying key: " + key);
+            try {
+                Object data = parseKey(new JSONWrapperKeyset(key), object);
+                if(data != null){
+                    return key;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
             }
         }
         return null;
@@ -50,6 +63,7 @@ public class JSONObjectWrapper extends JSONWrapper {
         }
         try {
             String validKey = getValidKey(keys);
+<<<<<<< HEAD
             if (validKey == null) {
                 return failed;
             }
@@ -60,6 +74,17 @@ public class JSONObjectWrapper extends JSONWrapper {
             return data;
         } catch (JSONException e) {
             debug(e.getMessage());
+=======
+            if (validKey != null) {
+                Object data = this.getObject(validKey);
+                if(data == null){
+                    return failed;
+                }
+                return data;
+            }
+        } catch (JSONException e) {
+            debug(e.toString());
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
         }
         return failed;
     }
@@ -79,7 +104,11 @@ public class JSONObjectWrapper extends JSONWrapper {
         return this.object;
     }
 
+<<<<<<< HEAD
     public String toString() {
+=======
+    public String toString(){
+>>>>>>> 9258a3add5ee270c55085104e7f02670ce793f0a
         return object.toString();
     }
 }
