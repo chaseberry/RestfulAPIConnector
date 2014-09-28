@@ -6,335 +6,350 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JSONWrapper {
+public abstract class JSONWrapper {
 
     private JSONException noObjectOrArrayExccetion = new JSONException("No JSONObjecr or JSONArray");
     private JSONException noArrayExcetion = new JSONException("No JSONArray");
 
-    private JSONObjectWrapper object;
-    private JSONArrayWrapper array;
-
     private boolean debugMode = false;
     private final String TAG = "JSONWRAPPER";
 
-    public JSONWrapper(JSONObject ob) {
-        object = new JSONObjectWrapper(ob);
-    }
-
-    public JSONWrapper(JSONArray ar) {
-        array = new JSONArrayWrapper(ar);
-    }
-
-    public JSONWrapper(String data) throws JSONException {
+    public static JSONWrapper parseJSON(String string) throws JSONException{
         try {
-            object = new JSONObjectWrapper(data);
+            return new JSONObjectWrapper(string);
         } catch (JSONException e) {
-            object = null;
-            try {
-                array = new JSONArrayWrapper(data);
-            } catch (JSONException ex) {
-                array = null;
-                throw new JSONException("Must provide a valid JSONArray or JSONObject");
-            }
         }
+        try{
+            return new JSONArrayWrapper(string);
+        }catch(JSONException e){
+
+        }
+        throw new JSONException("Couldn't parse" + string);
     }
 
-    public JSONObjectWrapper getJSONObjectWrapper() {
-        return object;
+    public static JSONObjectWrapper wrapperFromObject(JSONObject object){
+        return new JSONObjectWrapper(object);
     }
 
-    public JSONArrayWrapper getJSONArrayWrapper() {
-        return array;
+    public static JSONArrayWrapper wrapperFromArray(JSONArray array){
+        return new JSONArrayWrapper(array);
     }
 
-    public JSONObject getJSONObject() {
-        return object.getJSONObject();
-    }
-
-    public JSONArray getJSONArray() {
-        return array.getJSONArray();
-    }
     //***************************Debug functions****************************************************
 
     public void setDebugMode(boolean debug) {
         debugMode = debug;
-        if (object != null) {
-            object.setDebugMode(debug);
-        } else if (array != null) {
-            array.setDebugMode(debug);
-        }
     }
 
-    private void debug(String message) {
+    protected void debug(String message) {
         if (debugMode) {
             Log.d(TAG, message);
         }
     }
 
     //***************************Valid Stuff********************************************************
-    public String getValidKey(String... keys) {
-        if (object != null) {
-            return object.getValidKey(keys);
-        } else if (array != null) {
-            return array.getValidKey(keys);
-        }
-        return null;
+
+    public abstract String getValidKey(String... keys);
+
+    public boolean has(String... keys) {
+        return getValidKey(keys) != null;
     }
 
-    public boolean hasKey(String... keys) {
-        if (object != null) {
-            return object.hasKey(keys);
-        } else if (array != null) {
-            return array.hasKey(keys);
+    //****************************PARSERS***********************************************************
+
+    protected Object parseKey(JSONWrapperKeyset keySet, JSONArray array) throws JSONException {
+        boolean hasNext = keySet.hasNextKey();
+        String key = keySet.getCurrentKey();
+        int arrayKey = -1;
+        debug("Trying key: " + key + " : With JSONArray");
+        try {
+            arrayKey = Integer.parseInt(key);
+        } catch (NumberFormatException ex) {
+            debug(key + " is not a valid array key");
+            throw new JSONException(key + " is not a valid key for array");
         }
-        return false;
+        if (arrayKey < 0 || arrayKey >= array.length()) {
+            debug(key + " is an invalid index for JSONArray");
+            throw new JSONException(key + " is not a valid key for array");
+        }
+        if (hasNext) {
+            if (isObjectJSONObject(array.get(arrayKey))) {
+                return parseKey(keySet, array.getJSONObject(arrayKey));
+            } else {
+                return parseKey(keySet, array.getJSONArray(arrayKey));
+            }
+        } else {
+            return array.get(arrayKey);
+        }
     }
 
+    protected Object parseKey(JSONWrapperKeyset keySet, JSONObject object) throws JSONException {
+        boolean hasNext = keySet.hasNextKey();
+        String key = keySet.getCurrentKey();
+        debug("Trying key: " + key + " :On JSONObject");
+        if (!object.has(key)) {
+            debug(key + " is not a valid key for object");
+            throw new JSONException(key + " is not a valid key for object");
+        }
+        if (hasNext) {
+            if (isObjectJSONObject(object.get(key))) {
+                return parseKey(keySet, object.getJSONObject(key));
+            } else {
+                return parseKey(keySet, object.getJSONArray(key));
+            }
+        } else {
+            return object.get(key);
+        }
+    }
+
+    protected boolean isObjectJSONObject(Object o) {
+        return o instanceof JSONObject;
+    }
 
     //****************************Getters***********************************************************
 
-    public Object getObject(String key) throws JSONException {
-        if (object != null) {
-            return object.getObject(key);
-        } else if (array != null) {
-            return array.getObject(key);
-        }
-        throw noObjectOrArrayExccetion;
-    }
-
-    public Object getObject(int i) throws JSONException {
-        if (array == null) {
-            throw noArrayExcetion;
-        }
-        return array.getObject(i);
-    }
-
-    public JSONObject getJSONObject(String key) throws JSONException {
-        if (object != null) {
-            return object.getJSONObject(key);
-        } else if (array != null) {
-            return array.getJSONObject(key);
-        }
-        throw noObjectOrArrayExccetion;
-    }
-
-    public JSONObject getJSONObject(int i) throws JSONException {
-        if (array == null) {
-            throw noArrayExcetion;
-        }
-        return array.getJSONObject(i);
-    }
-
-    public JSONArray getJSONArray(String key) throws JSONException {
-        if (object != null) {
-            return object.getJSONArray(key);
-        } else if (array != null) {
-            return array.getJSONArray(key);
-        }
-        throw noObjectOrArrayExccetion;
-    }
-
-    public JSONArray getJSONArray(int i) throws JSONException {
-        if (array == null) {
-            throw noArrayExcetion;
-        }
-        return array.getJSONArray(i);
-    }
-
-    public String[] getStringArray(String key) throws JSONException {
-        if (object != null) {
-            return object.getStringArray(key);
-        } else if (array != null) {
-            return array.getStringArray(key);
-        }
-        throw noObjectOrArrayExccetion;
-    }
-
-    public String[] getStringArray(int i) throws JSONException {
-        if (array == null) {
-            throw noArrayExcetion;
-        }
-        return array.getStringArray(i);
-    }
+    public abstract Object getObject(String key) throws JSONException;
 
     public String getString(String key) throws JSONException {
-        if (object != null) {
-            return object.getString(key);
-        } else if (array != null) {
-            return array.getString(key);
+        Object string = this.getObject(key);
+        if (string == null) {
+            throw new JSONException("Invalid key:" + key);
         }
-        throw noObjectOrArrayExccetion;
-    }
-
-    public String getString(int i) throws JSONException {
-        if (array == null) {
-            throw noArrayExcetion;
-        }
-        return array.getString(i);
-    }
-
-    public int getInt(String key) throws JSONException {
-        if (object != null) {
-            return object.getInt(key);
-        } else if (array != null) {
-            return array.getInt(key);
-        }
-        throw noObjectOrArrayExccetion;
-    }
-
-    public int getInt(int i) throws JSONException {
-        if (array == null) {
-            throw noArrayExcetion;
-        }
-        return array.getInt(i);
-    }
-
-    public double getDouble(String key) throws JSONException {
-        if (object != null) {
-            return object.getDouble(key);
-        } else if (array != null) {
-            return array.getDouble(key);
-        }
-        throw noObjectOrArrayExccetion;
-    }
-
-    public double getDouble(int i) throws JSONException {
-        if (array == null) {
-            throw noArrayExcetion;
-        }
-        return array.getDouble(i);
-    }
-
-    public long getLong(String key) throws JSONException {
-        if (object != null) {
-            return object.getLong(key);
-        } else if (array != null) {
-            return array.getLong(key);
-        }
-        throw noObjectOrArrayExccetion;
-    }
-
-    public long getLong(int i) throws JSONException {
-        if (array == null) {
-            throw noArrayExcetion;
-        }
-        return array.getLong(i);
+        return String.valueOf(string);
     }
 
     public boolean getBoolean(String key) throws JSONException {
-        if (object != null) {
-            return object.getBoolean(key);
-        } else if (array != null) {
-            return array.getBoolean(key);
+        Object bool = this.getObject(key);
+        if (bool == null) {
+            throw new JSONException("Invalid key:" + key);
         }
-        throw noObjectOrArrayExccetion;
+        return Boolean.parseBoolean(String.valueOf(bool));
+    }
+
+    public int getInt(String key) throws JSONException {
+        Object integer = this.getObject(key);
+        if (integer == null) {
+            throw new JSONException("Invalid key:" + key);
+        }
+        try {
+            return Integer.parseInt(String.valueOf(integer));
+        } catch (NumberFormatException ex) {
+            throw new JSONException(integer + " in an invalid int");
+        }
+    }
+
+    public double getDouble(String key) throws JSONException {
+        Object doubleValue = this.getObject(key);
+        if (doubleValue == null) {
+            throw new JSONException("Invalid key:" + key);
+        }
+        try {
+            return Double.parseDouble(String.valueOf(doubleValue));
+        } catch (NumberFormatException ex) {
+            throw new JSONException(doubleValue + " is an invalid double");
+        }
+    }
+
+    public long getLong(String key) throws JSONException {
+        Object longValue = this.getObject(key);
+        if (longValue == null) {
+            throw new JSONException("Invalid key:" + key);
+        }
+        try {
+            return Long.parseLong(String.valueOf(longValue));
+        } catch (NumberFormatException ex) {
+            throw new JSONException(longValue.toString() + " is an invalid long");
+        }
+    }
+
+    public JSONArray getJSONArray(String key) throws JSONException {
+        Object jsonArray = this.getObject(key);
+        if (jsonArray == null) {
+            throw new JSONException("Invalid key: " + key);
+        }
+        try {
+            return (JSONArray) jsonArray;
+        } catch (ClassCastException ex) {
+            throw new JSONException(key + " does not link to a JSONArray");
+        }
+    }
+
+    public JSONObject getJSONObject(String key) throws JSONException {
+        Object jsonObject = getObject(key);
+        if (jsonObject == null) {
+            throw new JSONException("Invalid key: " + key);
+        }
+        try {
+            return (JSONObject) jsonObject;
+        } catch (ClassCastException ex) {
+            throw new JSONException(key + " does not link to a JSONArray");
+        }
+    }
+
+    public String[] getStringArray(String key) throws JSONException {
+        JSONArray jsonArray = this.getJSONArray(key);
+        if (jsonArray == null) {
+            throw new JSONException("Invalid key:" + key);
+        }
+        return JSONArrayToStringArray(jsonArray);
+    }
+
+    //**********getters with int
+
+    public Object getObject(int i) throws JSONException{
+        return null;
+    }
+
+    public JSONObject getJSONObject(int i) throws JSONException {
+        Object json = getObject(i);
+        if(json == null){
+            throw new JSONException("Wrapper is not JSONArray");
+        }
+        try {
+            return (JSONObject) json;
+        } catch (ClassCastException ex) {
+            throw new JSONException(i + " does not link to a JSONArray");
+        }
+    }
+
+    public JSONArray getJSONArray(int i) throws JSONException {
+        Object array = getJSONObject(i);
+        if(array == null){
+            throw new JSONException("Wrapper is not array");
+        }
+        try {
+            return (JSONArray) array;
+        } catch (ClassCastException ex) {
+            throw new JSONException(i + " does not link to a JSONArray");
+        }
+    }
+
+    public String[] getStringArray(int i) throws JSONException {
+        return JSONArrayToStringArray(getJSONArray(i));
+    }
+
+    public String getString(int i) throws JSONException {
+        Object string = getObject(i);
+        if(string == null){
+            throw new JSONException("Wrapper is not JSONArray");
+        }
+        return String.valueOf(string);
+    }
+
+    public int getInt(int i) throws JSONException {
+        try{
+            return Integer.parseInt(String.valueOf(getObject(i)));
+        }catch(NumberFormatException ex){
+            throw new JSONException("Couldn't convert to int");
+        }
+    }
+
+    public double getDouble(int i) throws JSONException {
+        try{
+            return Double.parseDouble(String.valueOf(getObject(i)));
+        }catch(NumberFormatException ex){
+            throw new JSONException("Couldn't convert to double");
+        }
+    }
+
+    public long getLong(int i) throws JSONException {
+        try{
+            return Long.parseLong(String.valueOf(getObject(i)));
+        }catch(NumberFormatException ex){
+            throw new JSONException("Couldn't convert to long");
+        }
     }
 
     public boolean getBolean(int i) throws JSONException {
-        if (array == null) {
-            throw noArrayExcetion;
-        }
-        return array.getBoolean(i);
+        return Boolean.parseBoolean(String.valueOf(getObject(i)));
     }
 
     //************************checkAndGetters*******************************************************
-    public Object checkAndGetObject(Object failed, String... keys) {
-        if (object != null) {
-            return object.checkAndGetObject(failed, keys);
-        } else if (array != null) {
-            return array.checkAndGetObject(failed, keys);
-        }
-        return failed;
-    }
+    public abstract Object checkAndGetObject(Object failed, String... keys);
 
     public JSONObject checkAndGetJSONObject(JSONObject failed, String... keys) {
-        if (object != null) {
-            return object.checkAndGetJSONObject(failed, keys);
-        } else if (array != null) {
-            return array.checkAndGetJSONObject(failed, keys);
-        }
-        return failed;
-    }
-
-    public JSONArray checkAndGetJSONArray(JSONArray failed, String... keys) {
-        if (object != null) {
-            return object.checkAndGetJSONArray(failed, keys);
-        } else if (array != null) {
-            return array.checkAndGetJSONArray(failed, keys);
-        }
-        return failed;
-    }
-
-    public String[] checkAndGetStringArray(String[] failed, String... keys) {
-        if (object != null) {
-            return object.checkAndGetStringArray(failed, keys);
-        } else if (array != null) {
-            return array.checkAndGetStringArray(failed, keys);
-        }
-        return failed;
-    }
-
-    public String checkAndGetString(String failed, String... keys) {
-        if (object != null) {
-            return object.checkAndGetString(failed, keys);
-        } else if (array != null) {
-            return array.checkAndGetString(failed, keys);
-        }
-        return failed;
-    }
-
-    public int checkAndGetInt(int failed, String... keys) {
-        if (object != null) {
-            return object.checkAndGetInt(failed, keys);
-        } else if (array != null) {
-            return array.checkAndGetInt(failed, keys);
-        }
-        return failed;
-    }
-
-    public double checkAndGetDouble(double failed, String... keys) {
-        if (object != null) {
-            return object.checkAndGetDouble(failed, keys);
-        } else if (array != null) {
-            return array.checkAndGetDouble(failed, keys);
+        try{
+            return new JSONObject(String.valueOf(checkAndGetObject(failed, keys)));
+        }catch (JSONException e){
+            debug("Couldn't convert to JSONObject");
         }
         return failed;
     }
 
     public long checkAndGetLong(long failed, String... keys) {
-        if (object != null) {
-            return object.checkAndGetLong(failed, keys);
-        } else if (array != null) {
-            return array.checkAndGetLong(failed, keys);
+        try{
+            return Long.parseLong(String.valueOf(checkAndGetObject(failed, keys)));
+        }catch(NumberFormatException ex){
+            debug("Couldn't convert to long");
+        }
+        return failed;
+    }
+
+    public String checkAndGetString(String failed, String... keys) {
+        String returned = String.valueOf(checkAndGetObject(failed, keys));
+        return "null".equals(returned) ? failed : returned;
+    }
+
+    public String[] checkAndGetStringArray(String[] failed, String... keys) {
+        JSONArray array = checkAndGetJSONArray(null, keys);
+        if(array == null){
+            return failed;
+        }
+        return JSONArrayToStringArray(array);
+    }
+
+    public JSONArray checkAndGetJSONArray(JSONArray failed, String... keys) {
+        try{
+            return new JSONArray(String.valueOf(checkAndGetObject(failed, keys)));
+        }catch(JSONException e){
+            debug("Couldn't convernt to JSONArray");
+        }
+        return failed;
+    }
+
+    public double checkAndGetDouble(double failed, String... keys) {
+        try{
+            return Double.parseDouble(String.valueOf(checkAndGetObject(failed, keys)));
+        }catch(NumberFormatException e){
+            debug("Couldn't convert to double");
+        }
+        return failed;
+    }
+
+    public int checkAndGetInt(int failed, String... keys) {
+        try {
+            return Integer.parseInt(String.valueOf(checkAndGetObject(failed, keys)));
+        }catch(NumberFormatException ex){
+            debug("Item not an int");
         }
         return failed;
     }
 
     public boolean checkAndGetBoolean(boolean failed, String... keys) {
-        if (object != null) {
-            return object.checkAndGetBoolean(failed, keys);
-        } else if (array != null) {
-            return array.checkAndGetBoolean(failed, keys);
-        }
-        return failed;
+        return Boolean.parseBoolean(String.valueOf(checkAndGetObject(failed, keys)));
     }
 
     public int length() {
-        if (object != null) {
-            return object.length();
-        } else if (array != null) {
-            return array.length();
-        }
         return -1;
     }
 
-    public boolean validWrapper() {
-        if (object != null) {
-            return object.isValid();
-        } else if (array != null) {
-            return array.isValid();
-        }
+    public boolean isValid() {
         return false;
+    }
+
+    private String[] JSONArrayToStringArray(JSONArray array) {
+        String[] data = new String[array.length()];
+        for (int z = 0; z < array.length(); z++) {
+            try {
+                data[z] = String.valueOf(array.get(z));
+            } catch (JSONException e) {
+            }
+        }
+        return data;
+    }
+
+    public String toString(){
+        return "Invalid JSONWrapper";
     }
 
 }
