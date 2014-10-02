@@ -2,8 +2,6 @@ package edu.csh.chase.RestfulAPIConnector;
 
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 import org.apache.http.client.methods.HttpRequestBase;
 
@@ -61,9 +59,6 @@ public class APIConnectionManager {
      */
     public void execute(RestAPIListener runner, String url, int method, String extra, Parameter... parameters)
         throws InvalidMethodTypeException {
-        if (!isNetworkOnline()) {
-            return;
-        }
 
         if (method < 0 || method > 5) {
             throw new InvalidMethodTypeException(method + " is not a valid method. Use RestAPIConnector to get " +
@@ -160,30 +155,6 @@ public class APIConnectionManager {
             url += "/";
         }
         execute(runner, url + endPoint, method, extra, parameters);
-    }
-
-    /**
-     * A convience method for network connection
-     * @return true if there is some form of internet access, false otherwise
-     */
-    public boolean isNetworkOnline() {
-        boolean status = false;
-        try {
-            ConnectivityManager cm = (ConnectivityManager) parent.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = cm.getNetworkInfo(0);
-            if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED) {
-                status = true;
-            } else {
-                netInfo = cm.getNetworkInfo(1);
-                if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED)
-                    status = true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return status;
-
     }
 
 }

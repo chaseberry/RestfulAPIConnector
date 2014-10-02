@@ -16,7 +16,7 @@ import edu.csh.chase.RestfulAPIConnector.JSONWrapper.JSONWrapper;
 /**
  * Created by chase on 9/27/14.
  */
-public class RestAPIRunnable implements Runnable{
+public class RestAPIRunnable implements Runnable {
 
     private RestAPIListener runner;
     private HttpRequestBase httpRequest;
@@ -28,7 +28,7 @@ public class RestAPIRunnable implements Runnable{
     public static final int HEAD = 4;
     public static final int OPTIONS = 5;
 
-    public RestAPIRunnable(RestAPIListener runner, HttpRequestBase request){
+    public RestAPIRunnable(RestAPIListener runner, HttpRequestBase request) {
         this.httpRequest = request;
         this.runner = runner;
     }
@@ -47,19 +47,19 @@ public class RestAPIRunnable implements Runnable{
                 return;
             }
             String res = EntityUtils.toString(response.getEntity());
-            try {
-                postExecute(JSONWrapper.parseJSON(res));
-            } catch (JSONException ex) {
-                postExecute(null);
+            postExecute(JSONWrapper.parseJSON(res));
+        } catch (JSONException ex) {
+            postExecute(null);
+            return;
+        } catch (Exception e) {
+            if (runner != null) {
+                runner.setStatusCode(1);
             }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            postExecute(null);
         }
     }
 
-    public void postExecute(JSONWrapper object){
+    public void postExecute(JSONWrapper object) {
         if (runner != null) {
             runner.setData(object);
             runner.start();
