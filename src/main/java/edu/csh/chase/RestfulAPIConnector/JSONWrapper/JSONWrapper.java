@@ -56,6 +56,11 @@ public abstract class JSONWrapper {
 
     //***************************Debug functions****************************************************
 
+    /**
+     * Sets the debug mode. Defaults to false.
+     *
+     * @param debug true to print debug messages, false to not.
+     */
     public void setDebugMode(boolean debug) {
         this.debugMode = debug;
     }
@@ -70,8 +75,14 @@ public abstract class JSONWrapper {
 
     public abstract String getValidKey(String... keys);
 
-    public boolean has(String... keys) {
-        return getValidKey(keys) != null;
+    /**
+     * Checks to see if the given key exists in the currently wrapped JSONItem
+     *
+     * @param key The key to check, can be a multikey
+     * @return true if the key exists, false otherwise
+     */
+    public boolean has(String key) {
+        return getValidKey(key) != null;
     }
 
     //****************************PARSERS***********************************************************
@@ -119,8 +130,22 @@ public abstract class JSONWrapper {
 
     //****************************Getters***********************************************************
 
+    /**
+     * Gets a standard java Object with the given key
+     *
+     * @param key The key to check, can be a multikey
+     * @return The Object found at the specific key
+     * @throws JSONException if the key does not exist
+     */
     public abstract Object getObject(String key) throws JSONException;
 
+    /**
+     * Gets the String at the specific key
+     *
+     * @param key The key to check, can be a multikey
+     * @return The String found at the key
+     * @throws JSONException if the key does not exist or is not a String
+     */
     public String getString(String key) throws JSONException {
         Object string = this.getObject(key);
         if (string == null) {
@@ -129,6 +154,13 @@ public abstract class JSONWrapper {
         return String.valueOf(string);
     }
 
+    /**
+     * Gets the boolean at the specific key
+     *
+     * @param key The key to check, can be a multikey
+     * @return The boolean found at the key
+     * @throws JSONException if the key does not exist, or is not a boolean
+     */
     public boolean getBoolean(String key) throws JSONException {
         Object bool = this.getObject(key);
         if (bool == null) {
@@ -137,6 +169,13 @@ public abstract class JSONWrapper {
         return Boolean.parseBoolean(String.valueOf(bool));
     }
 
+    /**
+     * Gets the int at the specific key
+     *
+     * @param key The key to check, can be a multikey
+     * @return the int found at the key
+     * @throws JSONException if the key does not exist, or is not an int
+     */
     public int getInt(String key) throws JSONException {
         Object integer = this.getObject(key);
         if (integer == null) {
@@ -149,6 +188,13 @@ public abstract class JSONWrapper {
         }
     }
 
+    /**
+     * Gets the double at the specific key
+     *
+     * @param key The key to check, can be a multikey
+     * @return the double found at the key
+     * @throws JSONException if the key does not exist, or is not a double
+     */
     public double getDouble(String key) throws JSONException {
         Object doubleValue = this.getObject(key);
         if (doubleValue == null) {
@@ -161,6 +207,13 @@ public abstract class JSONWrapper {
         }
     }
 
+    /**
+     * Gets the long found at the specific key
+     *
+     * @param key The key to check, can be a multikey
+     * @return the long found at the specific key
+     * @throws JSONException if the key is not found or was not a long
+     */
     public long getLong(String key) throws JSONException {
         Object longValue = this.getObject(key);
         if (longValue == null) {
@@ -173,6 +226,13 @@ public abstract class JSONWrapper {
         }
     }
 
+    /**
+     * Gets the JSONArray at the specific key
+     *
+     * @param key The key to check, can be a multikey
+     * @return The JSONArray found at the specific key
+     * @throws JSONException if the key is not found or not a JSONArray
+     */
     public JSONArray getJSONArray(String key) throws JSONException {
         Object jsonArray = this.getObject(key);
         if (jsonArray == null) {
