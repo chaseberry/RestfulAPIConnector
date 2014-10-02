@@ -245,6 +245,13 @@ public abstract class JSONWrapper {
         }
     }
 
+    /**
+     * Gets the JSONObject at the given key
+     *
+     * @param key The key to check, can be a multikey
+     * @return The JSONObject found at the given key
+     * @throws JSONException if the key was invalid, or not a JSONObject
+     */
     public JSONObject getJSONObject(String key) throws JSONException {
         Object jsonObject = getObject(key);
         if (jsonObject == null) {
@@ -257,6 +264,13 @@ public abstract class JSONWrapper {
         }
     }
 
+    /**
+     * Gets a JSONArray from a given key and converts it to a String Array for convience
+     *
+     * @param key The key to check, can be a multikey
+     * @return A String Array from a JSONArray at the given key
+     * @throws JSONException if the key was invalid or not a JSONArray
+     */
     public String[] getStringArray(String key) throws JSONException {
         JSONArray jsonArray = this.getJSONArray(key);
         if (jsonArray == null) {
