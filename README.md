@@ -124,9 +124,9 @@ The JSONWrapper also supports nested keys/arrays.
 
 ```JSON
 {
-    key1:"some string",
-    key2:{
-        key3:"some data"
+    "key1":"some string",
+    "key2":{
+        "key3":"some data"
     }
     
 }
