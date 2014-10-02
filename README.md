@@ -10,7 +10,7 @@ To-do
 - [ ] Change how errors work 
 - [ ] Add customization for defining success and failure
 - [ ] Improve regex on executeWithEndpoint functions
-- [ ] Optimize the nested keys functions
+- [x] Optimize the nested keys functions
 
 
 Usage
