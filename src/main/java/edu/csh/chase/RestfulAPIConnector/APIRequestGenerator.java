@@ -30,6 +30,17 @@ public class APIRequestGenerator {
     private static final String JSONKEY = "rawJson";
     private static final String FORMKEY = "formData";
 
+
+    /**
+     * Generates an HttpRequest from the given parameters.
+     *
+     * @param method An int method type defined in RestAPIRunnable
+     * @param url The url to connect to
+     * @param parameters A varArg of Parameters to add to this request. Only applicable parameters will be applied
+     *                   to the request. IE POST Form data will only be added to a POST request. If given
+     *                   Form and JSONBody, a post request will take only the Form data.
+     * @return A HttpRequest if everything was valid, or null if a problem occured
+     */
     public static HttpRequestBase generateRequest(final int method, String url, Parameter... parameters){
         HashMap<String, Object> paramMap = parseParameters(url, parameters);
         HttpRequestBase httpRequest = null;

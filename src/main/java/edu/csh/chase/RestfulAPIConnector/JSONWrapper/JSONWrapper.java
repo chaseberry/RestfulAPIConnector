@@ -14,6 +14,13 @@ public abstract class JSONWrapper {
     private boolean debugMode = false;
     private final String TAG = "JSONWRAPPER";
 
+    /**
+     * Returns a new JSONObjectWrapper or JSONArrayWrapper from the given String
+     *
+     * @param string A valid JSONEncoded string of either a JSONObject or JSONArray
+     * @return A JSONObjectWrapper if the string was a JSONObject or JSONArrayWrapper if the string was a JSONArray
+     * @throws JSONException if the string could not be parsed into valid JSON
+     */
     public static JSONWrapper parseJSON(String string) throws JSONException{
         try {
             return new JSONObjectWrapper(string);
@@ -27,10 +34,22 @@ public abstract class JSONWrapper {
         throw new JSONException("Couldn't parse" + string);
     }
 
+    /**
+     * Wraps the given JSONObject in a JSONObjectWrapper
+     *
+     * @param object The JSONObject to wrap
+     * @return The wrapped JSONObject
+     */
     public static JSONObjectWrapper wrapperFromObject(JSONObject object){
         return new JSONObjectWrapper(object);
     }
 
+    /**
+     * Wraps the given JSONArray into a JSONArray
+     *
+     * @param array The JSONArray to wrap
+     * @return The wrapped JSONArray
+     */
     public static JSONArrayWrapper wrapperFromArray(JSONArray array){
         return new JSONArrayWrapper(array);
     }
