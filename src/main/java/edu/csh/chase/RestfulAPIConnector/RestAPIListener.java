@@ -8,9 +8,9 @@ import edu.csh.chase.RestfulAPIConnector.JSONWrapper.JSONWrapper;
  */
 public abstract class RestAPIListener {
 
-    private JSONWrapper data;
-    private String extra;
-    private int statusCode;
+    protected JSONWrapper data;
+    protected String extra;
+    protected int statusCode;
 
     /**
      * The success function
@@ -29,7 +29,7 @@ public abstract class RestAPIListener {
      */
     public abstract void failure(final int statusCode);
 
-    
+
     public void start() {
         if(statusCode >= 200 && statusCode <= 299){
             success(data, statusCode);

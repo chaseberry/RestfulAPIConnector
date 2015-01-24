@@ -7,10 +7,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
 
+import edu.csh.chase.RestfulAPIConnector.JSONWrapper.JSONArrayWrapper;
 import edu.csh.chase.RestfulAPIConnector.JSONWrapper.JSONWrapper;
 
 /**
@@ -20,13 +22,6 @@ public class RestAPIRunnable implements Runnable {
 
     private RestAPIListener runner;
     private HttpRequestBase httpRequest;
-
-    public static final int GET = 0;
-    public static final int POST = 1;
-    public static final int PUT = 2;
-    public static final int DELETE = 3;
-    public static final int HEAD = 4;
-    public static final int OPTIONS = 5;
 
     public RestAPIRunnable(RestAPIListener runner, HttpRequestBase request) {
         this.httpRequest = request;
@@ -48,15 +43,20 @@ public class RestAPIRunnable implements Runnable {
             }
             String res = EntityUtils.toString(response.getEntity());
             postExecute(JSONWrapper.parseJSON(res));
+            return;
         } catch (JSONException ex) {
             postExecute(null);
             return;
-        } catch (Exception e) {
-            if (runner != null) {
-                runner.setStatusCode(1);
-            }
-            postExecute(null);
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        if (runner != null) {
+            runner.setStatusCode(1);
+        }
+        postExecute(null);
     }
 
     public void postExecute(JSONWrapper object) {

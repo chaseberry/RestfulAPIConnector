@@ -1,41 +1,32 @@
 package edu.csh.chase.RestfulAPIConnector;
 
-import org.json.JSONObject;
-
 /**
  * Created by chase on 7/15/14.
  */
-public class Parameter {
-
-    public static final int URLPARAMETER = 0;
-    public static final int FORMDATA = 1;
-    public static final int HEADER = 2;
-    public static final int JSONBODY = 3;
+public abstract class Parameter {
 
     private final String key;
-    private String value;
-    private final int methodType;
+    private Object value;
+    private final ParameterType methodType;
 
     /**
      * Defines a new Parameter to send with a URL Request
      *
-     * @param key A String key for the parameter
-     * @param value A String value for the parameter
+     * @param key        A String key for the parameter
+     * @param value      A String value for the parameter
      * @param methodType An int definition of the method type
      *                   Parameter.URLPARAMETER - A parameter added to the end of the url as ?key=value
      *                   Parameter.FORMDATA - A paramter in a POST form. Only works for POST requests
      *                   Parameter.HEADER - A URL Encoded header
      *                   Parameter.JSONBODY - Raw body in JSON Format
-     * @throws edu.csh.chase.RestfulAPIConnector.RestAPIParemeterException If you pass an invalid Parameter type
      */
-    public Parameter(final String key, String value, int methodType) throws RestAPIParemeterException{
+    protected Parameter(final String key, Object value, ParameterType methodType) {
         this.key = key;
         this.value = value;
         this.methodType = methodType;
     }
 
     /**
-     *
      * @return They key associted with this Parameter
      */
     public String getKey() {
@@ -43,15 +34,15 @@ public class Parameter {
     }
 
     /**
-     *
      * @return The value associted with this Parameter
      */
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
     /**
      * Sets the value of this Parameter
+     *
      * @param value
      */
     public void setValue(String value) {
@@ -59,31 +50,32 @@ public class Parameter {
     }
 
     /**
-     *
      * @return The int method type
      */
-    public int getMethodType() {
+    public ParameterType getMethodType() {
         return methodType;
     }
 
     /**
-     *
      * @return A string defination of this Parameter
      */
-    public String toString(){
+    public String toString() {
         return "Paremter of type " + getParemeterType() + " with data as key:value, " + key + ":" + value;
     }
 
     /**
-     *
      * @return A string representation of the method type
      */
     public String getParemeterType() {
         switch (methodType) {
-            case 0: return "URL";
-            case 1: return "Post Form Data";
-            case 2: return "Header";
-            case 3: return "Raw JSON Body";
+            case URL:
+                return "URL";
+            case FORMDATA:
+                return "Post Form Data";
+            case HEADER:
+                return "Header";
+            case JSONBODY:
+                return "Raw JSON Body";
         }
         return "";
     }
