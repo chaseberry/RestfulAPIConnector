@@ -7,7 +7,7 @@ To-do
 =====
 - [x] Fix Success status code check
 - [x] Add Javadocs
-- [ ] Change how errors work 
+- [X] Change how errors work 
 - [ ] Add customization for defining success and failure
 - [ ] Improve regex on executeWithEndpoint functions
 - [x] Optimize the nested keys functions
