@@ -23,30 +23,21 @@ Data retrieved from the server be in JSON format.
 
 ```Java
 APIConnectionManager apiConnection = new APIConnectionManager(someContext);
-Parameter email, password;
 
-try{
-    email = new FormParameter("email", userEmail);
-    password = new FormParameter("password", userPassword);
-}catch(RestAPIParemeterException e){
-    //some catch code
-}
+FormParameter email = new FormParameter("email", userEmail);
+FormParameter password = new FormParameter("password", userPassword);
 
-try{
-    apiConnection.execute(new RestAPIListener() {
-                @Override
-                public void success(JSONWrapper data, int statusCode) {
-                    //do something on success
-                }
+apiConnection.execute(new RestAPIListener() {
+            @Override
+            public void success(JSONWrapper data, int statusCode) {
+                //do something on success
+            }
 
-                @Override
-                public void failure(int statusCode) {
-                    //do something on failure
-                }
-            }, "http://someurl.com/users" RestAPIRunnable.POST, email, password);
-}catch(InvalidMethodTypeException e){
-    //Don't use invalid method types
-}
+            @Override
+            public void failure(int statusCode) {
+                //do something on failure
+            }
+        }, "http://someurl.com/users" RestAPIRunnable.POST, email, password);
 
 ```
 
@@ -55,21 +46,17 @@ But it also uses endpoints!
 ```Java
 APIConnectionManager apiConnection = new APIConnectionManager("http://someurl.com/some/base/api");
 
-try{
-    apiConnection.executeWithEndpoint(new RestAPIListener() {
-                @Override
-                public void success(JSONWrapper data, int statusCode) {
-                    //something on success
-                }
+apiConnection.executeWithEndpoint(new RestAPIListener() {
+            @Override
+            public void success(JSONWrapper data, int statusCode) {
+                //something on success
+            }
 
-                @Override
-                public void failure(int statusCode) {
-                    //something on failure
-                }
-            }, "/messages", RestAPIRunnable.GET);
-}catch(InvalidMethodTypeException e){
-    //Don't use invalid method types
-}
+            @Override
+            public void failure(int statusCode) {
+                //something on failure
+            }
+        }, "/messages", RestAPIRunnable.GET);
 ```
 
 Form Data, URL Parameters, and Headers all have new creation in the form of URLParameter, HeaderParameter, and FormParameter. These work in the exact same was as delcaring a parameter but it takes care of type handling.
