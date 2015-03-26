@@ -20,22 +20,20 @@ import edu.csh.chase.RestfulAPIConnector.JSONWrapper.JSONWrapper;
  */
 public class RestAPIRunnable implements Runnable {
 
-    private RestAPIListener runner;
-    private HttpRequestBase httpRequest;
+    private Request request;
 
-    public RestAPIRunnable(RestAPIListener runner, HttpRequestBase request) {
-        this.httpRequest = request;
-        this.runner = runner;
+    public RestAPIRunnable(Request request) {
+        this.request = request;
     }
 
     @Override
     public void run() {
         try {
             HttpClient client = new DefaultHttpClient();
-            HttpResponse response = client.execute(httpRequest);
+            HttpResponse response = client.execute(request.build());
             StatusLine status = response.getStatusLine();
-            if (runner != null) {
-                runner.setStatusCode(status.getStatusCode());
+            if (request.getResponseListener() != null) {
+                request.getResponseListener().setStatusCode(status.getStatusCode());
             }
             if (response.getEntity() == null) {
                 postExecute(null);
@@ -53,16 +51,16 @@ public class RestAPIRunnable implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (runner != null) {
-            runner.setStatusCode(1);
+        if (request.getResponseListener() != null) {
+            request.getResponseListener().setStatusCode(1);
         }
         postExecute(null);
     }
 
     public void postExecute(JSONWrapper object) {
-        if (runner != null) {
-            runner.setData(object);
-            runner.start();
+        if (request.getResponseListener() != null) {
+            request.getResponseListener().setData(object);
+            request.getResponseListener().start();
         }
     }
 

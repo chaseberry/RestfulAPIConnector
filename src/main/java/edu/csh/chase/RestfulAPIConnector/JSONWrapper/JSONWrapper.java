@@ -21,14 +21,14 @@ public abstract class JSONWrapper {
      * @return A JSONObjectWrapper if the string was a JSONObject or JSONArrayWrapper if the string was a JSONArray
      * @throws JSONException if the string could not be parsed into valid JSON
      */
-    public static JSONWrapper parseJSON(String string) throws JSONException{
+    public static JSONWrapper parseJSON(String string) throws JSONException {
         try {
             return new JSONObjectWrapper(string);
         } catch (JSONException e) {
         }
-        try{
+        try {
             return new JSONArrayWrapper(string);
-        }catch(JSONException e){
+        } catch (JSONException e) {
 
         }
         throw new JSONException("Couldn't parse" + string);
@@ -40,7 +40,7 @@ public abstract class JSONWrapper {
      * @param object The JSONObject to wrap
      * @return The wrapped JSONObject
      */
-    public static JSONObjectWrapper wrapperFromObject(JSONObject object){
+    public static JSONObjectWrapper wrapperFromObject(JSONObject object) {
         return new JSONObjectWrapper(object);
     }
 
@@ -50,7 +50,7 @@ public abstract class JSONWrapper {
      * @param array The JSONArray to wrap
      * @return The wrapped JSONArray
      */
-    public static JSONArrayWrapper wrapperFromArray(JSONArray array){
+    public static JSONArrayWrapper wrapperFromArray(JSONArray array) {
         return new JSONArrayWrapper(array);
     }
 
@@ -281,13 +281,13 @@ public abstract class JSONWrapper {
 
     //**********getters with int
 
-    public Object getObject(int i) throws JSONException{
+    public Object getObject(int i) throws JSONException {
         return null;
     }
 
     public JSONObject getJSONObject(int i) throws JSONException {
         Object json = getObject(i);
-        if(json == null){
+        if (json == null) {
             throw new JSONException("Wrapper is not JSONArray");
         }
         try {
@@ -299,7 +299,7 @@ public abstract class JSONWrapper {
 
     public JSONArray getJSONArray(int i) throws JSONException {
         Object array = getJSONObject(i);
-        if(array == null){
+        if (array == null) {
             throw new JSONException("Wrapper is not array");
         }
         try {
@@ -315,37 +315,37 @@ public abstract class JSONWrapper {
 
     public String getString(int i) throws JSONException {
         Object string = getObject(i);
-        if(string == null){
+        if (string == null) {
             throw new JSONException("Wrapper is not JSONArray");
         }
         return String.valueOf(string);
     }
 
     public int getInt(int i) throws JSONException {
-        try{
+        try {
             return Integer.parseInt(String.valueOf(getObject(i)));
-        }catch(NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             throw new JSONException("Couldn't convert to int");
         }
     }
 
     public double getDouble(int i) throws JSONException {
-        try{
+        try {
             return Double.parseDouble(String.valueOf(getObject(i)));
-        }catch(NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             throw new JSONException("Couldn't convert to double");
         }
     }
 
     public long getLong(int i) throws JSONException {
-        try{
+        try {
             return Long.parseLong(String.valueOf(getObject(i)));
-        }catch(NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             throw new JSONException("Couldn't convert to long");
         }
     }
 
-    public boolean getBolean(int i) throws JSONException {
+    public boolean getBoolean(int i) throws JSONException {
         return Boolean.parseBoolean(String.valueOf(getObject(i)));
     }
 
@@ -353,18 +353,18 @@ public abstract class JSONWrapper {
     public abstract Object checkAndGetObject(Object failed, String... keys);
 
     public JSONObject checkAndGetJSONObject(JSONObject failed, String... keys) {
-        try{
+        try {
             return new JSONObject(String.valueOf(checkAndGetObject(failed, keys)));
-        }catch (JSONException e){
+        } catch (JSONException e) {
             debug("Couldn't convert to JSONObject");
         }
         return failed;
     }
 
     public long checkAndGetLong(long failed, String... keys) {
-        try{
+        try {
             return Long.parseLong(String.valueOf(checkAndGetObject(failed, keys)));
-        }catch(NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             debug("Couldn't convert to long");
         }
         return failed;
@@ -377,25 +377,25 @@ public abstract class JSONWrapper {
 
     public String[] checkAndGetStringArray(String[] failed, String... keys) {
         JSONArray array = checkAndGetJSONArray(null, keys);
-        if(array == null){
+        if (array == null) {
             return failed;
         }
         return JSONArrayToStringArray(array);
     }
 
     public JSONArray checkAndGetJSONArray(JSONArray failed, String... keys) {
-        try{
+        try {
             return new JSONArray(String.valueOf(checkAndGetObject(failed, keys)));
-        }catch(JSONException e){
+        } catch (JSONException e) {
             debug("Couldn't convernt to JSONArray");
         }
         return failed;
     }
 
     public double checkAndGetDouble(double failed, String... keys) {
-        try{
+        try {
             return Double.parseDouble(String.valueOf(checkAndGetObject(failed, keys)));
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             debug("Couldn't convert to double");
         }
         return failed;
@@ -404,7 +404,7 @@ public abstract class JSONWrapper {
     public int checkAndGetInt(int failed, String... keys) {
         try {
             return Integer.parseInt(String.valueOf(checkAndGetObject(failed, keys)));
-        }catch(NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             debug("Item not an int");
         }
         return failed;
@@ -433,7 +433,7 @@ public abstract class JSONWrapper {
         return data;
     }
 
-    public String toString(){
+    public String toString() {
         return "Invalid JSONWrapper";
     }
 
