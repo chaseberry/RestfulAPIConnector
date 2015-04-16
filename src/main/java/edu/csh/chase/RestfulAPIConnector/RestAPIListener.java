@@ -25,16 +25,17 @@ public abstract class RestAPIListener {
      * The failure function
      * This function is called when a request returns with a status code not between 200 and 299
      *
+     * @param data
      * @param statusCode the status code from the request
      */
-    public abstract void failure(final int statusCode);
+    public abstract void failure(JSONWrapper data, final int statusCode);
 
 
     public void start() {
         if(statusCode >= 200 && statusCode <= 299){
             success(data, statusCode);
         }else{
-            failure(statusCode);
+            failure(data, statusCode);
         }
     }
 
